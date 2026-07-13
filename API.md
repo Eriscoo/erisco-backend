@@ -4,7 +4,7 @@
 
 ## Authentication
 
-Semua endpoint yang memerlukan auth menggunakan **Bearer Token** (JWT).
+All endpoints requiring auth use **Bearer Token** (JWT).
 Header:
 ```
 Authorization: Bearer <token>
@@ -14,14 +14,14 @@ Authorization: Bearer <token>
 
 ## POST /register
 
-Mendaftarkan user baru. Role otomatis `user` (id: 2).
+Register a new user. Role defaults to `user` (id: 2).
 
 ### Request
 ```json
 {
   "name": "string (required)",
   "email": "string (required, valid email)",
-  "password": "string (required, min 6 karakter)"
+  "password": "string (required, min 6 characters)"
 }
 ```
 
@@ -32,14 +32,14 @@ Mendaftarkan user baru. Role otomatis `user` (id: 2).
 }
 ```
 
-### Response 400 (Bad Request — validasi gagal)
+### Response 400 (Bad Request — validation failed)
 ```json
 {
   "error": "Key: 'Name' Error:Field validation for 'Name' failed on the 'required' tag"
 }
 ```
 
-### Response 409 (Conflict — email sudah terdaftar)
+### Response 409 (Conflict — email already registered)
 ```json
 {
   "error": "email already exists"
@@ -50,7 +50,7 @@ Mendaftarkan user baru. Role otomatis `user` (id: 2).
 
 ## POST /login
 
-Login dengan email & password.
+Login with email & password.
 
 ### Request
 ```json
@@ -67,7 +67,7 @@ Login dengan email & password.
 }
 ```
 
-### Response 401 (Unauthorized — email/password salah)
+### Response 401 (Unauthorized — invalid email or password)
 ```json
 {
   "error": "invalid email or password"
@@ -78,7 +78,7 @@ Login dengan email & password.
 
 ## GET /me
 
-Mengambil data user yang sedang login.
+Get currently logged-in user data.
 
 ### Headers
 ```
@@ -103,7 +103,7 @@ Authorization: Bearer <token>
 
 ## GET /tags
 
-Mengambil semua daftar tags.
+Get all tags.
 
 ### Response 200 (Success)
 ```json
@@ -130,7 +130,7 @@ Mengambil semua daftar tags.
 
 ## POST /tags
 
-Membuat tag baru (memerlukan auth).
+Create a new tag (requires auth).
 
 ### Headers
 ```
@@ -153,14 +153,14 @@ Content-Type: application/json
 }
 ```
 
-### Response 400 (Bad Request — validasi gagal)
+### Response 400 (Bad Request — validation failed)
 ```json
 {
   "error": "Key: 'Name' Error:Field validation for 'Name' failed on the 'required' tag"
 }
 ```
 
-### Response 409 (Conflict — tag sudah ada)
+### Response 409 (Conflict — tag already exists)
 ```json
 {
   "error": "tag already exists"
@@ -171,7 +171,7 @@ Content-Type: application/json
 
 ## PUT /tags/{id}
 
-Update nama tag berdasarkan ID (memerlukan auth).
+Update tag name by ID (requires auth).
 
 ### Headers
 ```
@@ -219,7 +219,7 @@ Content-Type: application/json
 
 ## DELETE /tags/{id}
 
-Hapus tag berdasarkan ID (memerlukan auth).
+Delete tag by ID (requires auth).
 
 ### Headers
 ```
@@ -251,7 +251,7 @@ Authorization: Bearer <token>
 
 ## GET /categories
 
-Mengambil semua daftar categories.
+Get all categories.
 
 ### Response 200 (Success)
 ```json
@@ -278,7 +278,7 @@ Mengambil semua daftar categories.
 
 ## POST /categories
 
-Membuat category baru (memerlukan auth).
+Create a new category (requires auth).
 
 ### Headers
 ```
@@ -319,7 +319,7 @@ Content-Type: application/json
 
 ## PUT /categories/{id}
 
-Update nama category berdasarkan ID (memerlukan auth).
+Update category name by ID (requires auth).
 
 ### Headers
 ```
@@ -367,7 +367,7 @@ Content-Type: application/json
 
 ## DELETE /categories/{id}
 
-Hapus category berdasarkan ID (memerlukan auth).
+Delete category by ID (requires auth).
 
 ### Headers
 ```
@@ -399,7 +399,7 @@ Authorization: Bearer <token>
 
 ## GET /profile/{user_id}
 
-Mengambil data profile user berdasarkan ID.
+Get user profile data by ID.
 
 ### Headers
 ```
@@ -431,7 +431,7 @@ Authorization: Bearer <token>
 
 ## PUT /profile/{user_id}
 
-Membuat atau memperbarui profile user (hanya bisa edit profile sendiri).
+Create or update user profile (can only edit own profile).
 
 ### Headers
 ```
@@ -475,13 +475,13 @@ Content-Type: application/json
 
 ## Convention
 
-| Item | Aturan |
-|---|---|
+| Item | Rule |
+|---|---|---|
 | Base path | `/api/v1/` |
-| Auth | Bearer JWT (exp: 72 jam) |
+| Auth | Bearer JWT (exp: 72 hours) |
 | Request body | JSON, `Content-Type: application/json` |
 | Success | 200, 201 |
-| Validasi gagal | 400 |
-| Auth gagal | 401 |
-| Duplikat data | 409 |
+| Validation failed | 400 |
+| Auth failed | 401 |
+| Duplicate data | 409 |
 | Server error | 500 |

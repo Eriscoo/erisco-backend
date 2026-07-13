@@ -77,20 +77,20 @@ CREATE TABLE posts (
 );
 ```
 
-| Column | Type | Fungsi |
+| Column | Type | Description |
 |---|---|---|
 | `id` | SERIAL PK | Primary key, auto increment |
-| `title` | VARCHAR(255) | Judul artikel (wajib) |
-| `slug` | VARCHAR(255) | Versi URL-friendly dari title. Unik, jadi tidak boleh ada judul yang sama slug-nya. Contoh: `"cara-memasak-nasi-goreng"` |
-| `body` | TEXT | Isi konten artikel (bisa panjang) |
-| `image_url` | VARCHAR(500) | Path ke file gambar thumbnail/header artikel. Disimpan sebagai string path, bukan file binary |
-| `categories` | TEXT | Comma-separated ID dari tabel categories. Contoh: `"1,3,5"` |
-| `tags` | TEXT | Comma-separated ID dari tabel tags. Contoh: `"2,4,7"` |
-| `created_by` | INT | Foreign key ke tabel users. Menentukan siapa penulis artikel. CASCADE → jika user dihapus, post-nya ikut terhapus |
-| `status` | VARCHAR(20) | Status publikasi. Draft → masih diedit, Published → sudah terbit, Archived → sudah tidak ditampilkan |
-| `published_at` | TIMESTAMP | Tanggal & waktu artikel diterbitkan. NULL selama masih draft, diisi otomatis saat status berubah jadi 'published' |
-| `created_at` | TIMESTAMP | Tanggal artikel dibuat (otomatis) |
-| `updated_at` | TIMESTAMP | Tanggal artikel terakhir diedit (otomatis) |
+| `title` | VARCHAR(255) | Article title (required) |
+| `slug` | VARCHAR(255) | URL-friendly version of title. Unique, so no two articles share the same slug. Example: `"how-to-cook-fried-rice"` |
+| `body` | TEXT | Article content (can be long) |
+| `image_url` | VARCHAR(500) | Path to article thumbnail/header image. Stored as string path, not binary |
+| `categories` | TEXT | Comma-separated IDs from categories table. Example: `"1,3,5"` |
+| `tags` | TEXT | Comma-separated IDs from tags table. Example: `"2,4,7"` |
+| `created_by` | INT | Foreign key to users table. Determines the author. CASCADE → if user is deleted, their posts are also deleted |
+| `status` | VARCHAR(20) | Publication status. Draft → still editing, Published → already published, Archived → no longer displayed |
+| `published_at` | TIMESTAMP | Date & time article was published. NULL while draft, auto-filled when status changes to 'published' |
+| `created_at` | TIMESTAMP | Date article was created (auto) |
+| `updated_at` | TIMESTAMP | Date article was last edited (auto) |
 
 ### categories
 
@@ -145,13 +145,13 @@ CREATE TABLE user_profile (
 );
 ```
 
-| Column | Type | Keterangan |
+| Column | Type | Description |
 |---|---|---|
 | user_id | INT PK | FK → users(id) CASCADE |
-| bio | VARCHAR(200) | Bio singkat |
-| avatar_url | VARCHAR(500) | Path foto profil |
+| bio | VARCHAR(200) | Short bio |
+| avatar_url | VARCHAR(500) | Profile photo path |
 | website | VARCHAR(255) | Website |
-| location | VARCHAR(100) | Lokasi |
-| phone | VARCHAR(20) | No telepon |
+| location | VARCHAR(100) | Location |
+| phone | VARCHAR(20) | Phone number |
 | created_at | TIMESTAMP | Auto |
 | updated_at | TIMESTAMP | Auto |

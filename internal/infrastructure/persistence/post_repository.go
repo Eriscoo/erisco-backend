@@ -152,6 +152,9 @@ func (r *postRepository) populateCategoryNames(posts []domain.Post) error {
 		}
 		catMap[id] = name
 	}
+	if err := catRows.Err(); err != nil {
+		return err
+	}
 
 	for i, p := range posts {
 		if p.Categories == "" {
@@ -189,6 +192,9 @@ func (r *postRepository) populateTagNames(posts []domain.Post) error {
 			return err
 		}
 		tagMap[id] = name
+	}
+	if err := tagRows.Err(); err != nil {
+		return err
 	}
 
 	for i, p := range posts {

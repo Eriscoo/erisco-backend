@@ -1,4 +1,4 @@
-# Erisco Blog — Backend
+# Erisco Project Backend
 
 Golang v1.26.5 + Gin + PostgreSQL 17
 

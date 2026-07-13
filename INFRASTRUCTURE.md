@@ -70,8 +70,8 @@ cmd/server/main.go              → DI wiring
 domain ← application ← infrastructure, transport
 ```
 
-Semua layer depend ke dalam. Domain tidak tahu apa-apa.
+All layers depend inward. Domain knows nothing.
 
 ## API
 
-Semua endpoint di bawah `/api/v1/`. Lihat `API.md` untuk detail request & response.
+All endpoints under `/api/v1/`. See `API.md` for request & response details.

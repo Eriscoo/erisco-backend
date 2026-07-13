@@ -17,7 +17,7 @@ go run ./cmd/server
 
 ## Environment Variables
 
-Buat file `.env`:
+Create `.env` file:
 
 ```env
 DATABASE_URL=postgres://username:password@localhost:5432/dbname?sslmode=disable&timezone=Asia/Jakarta
@@ -29,9 +29,9 @@ APP_ENV={APPENVHERE}
 
 ## API Endpoints
 
-Semua endpoint di bawah `/api/v1/`:
+All endpoints under `/api/v1/`:
 
-| Method | Endpoint | Auth | Deskripsi |
+| Method | Endpoint | Auth | Description |
 |---|---|---|---|
 | POST | `/register` | No | Register user |
 | POST | `/login` | No | Login → JWT token |
@@ -50,4 +50,4 @@ Semua endpoint di bawah `/api/v1/`:
 
 ## Swagger
 
-`GET /swagger/index.html` — dokumentasi API interaktif.
+`GET /swagger/index.html` — interactive API documentation.

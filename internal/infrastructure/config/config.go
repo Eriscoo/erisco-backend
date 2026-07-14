@@ -2,16 +2,18 @@ package config
 
 import (
 	"os"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
 
 type Config struct {
-	DatabaseURL string
-	JWTSecret   string
-	Port        string
-	UploadDir   string
-	AppEnv      string
+	DatabaseURL   string
+	JWTSecret     string
+	Port          string
+	UploadDir     string
+	AppEnv        string
+	AllowOrigins  []string
 }
 
 func Load() *Config {
@@ -42,11 +44,21 @@ func Load() *Config {
 		appEnv = "development"
 	}
 
+	allowOriginsRaw := os.Getenv("ALLOW_ORIGINS")
+	allowOrigins := []string{"http://localhost:5173"}
+	if allowOriginsRaw != "" {
+		allowOrigins = strings.Split(allowOriginsRaw, ",")
+		for i := range allowOrigins {
+			allowOrigins[i] = strings.TrimSpace(allowOrigins[i])
+		}
+	}
+
 	return &Config{
-		DatabaseURL: dbURL,
-		JWTSecret:   jwtSecret,
-		Port:        port,
-		UploadDir:   uploadDir,
-		AppEnv:      appEnv,
+		DatabaseURL:  dbURL,
+		JWTSecret:    jwtSecret,
+		Port:         port,
+		UploadDir:    uploadDir,
+		AppEnv:       appEnv,
+		AllowOrigins: allowOrigins,
 	}
 }

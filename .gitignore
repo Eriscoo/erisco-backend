@@ -17,5 +17,10 @@ Thumbs.db
 # OpenCode
 .opencode/
 
+# Uploads
+uploads/post/*
+uploads/post-cover/*
+uploads/post-profile/*
+
 # Server
 server

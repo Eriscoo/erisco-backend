@@ -20,7 +20,7 @@ Thumbs.db
 # Uploads
 uploads/post/*
 uploads/post-cover/*
-uploads/post-profile/*
+uploads/profile/*
 
 # Server
 server

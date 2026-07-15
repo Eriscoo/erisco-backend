@@ -44,13 +44,13 @@ type createPostReq struct {
 }
 
 type updatePostReq struct {
-	Title      string `json:"title"`
-	Slug       string `json:"slug"`
-	Body       string `json:"body"`
-	ImageURL   string `json:"image_url"`
-	Categories string `json:"categories"`
-	Tags       string `json:"tags"`
-	Status     string `json:"status"`
+	Title      string  `json:"title"`
+	Slug       string  `json:"slug"`
+	Body       string  `json:"body"`
+	ImageURL   string  `json:"image_url"`
+	Categories *string `json:"categories"`
+	Tags       *string `json:"tags"`
+	Status     string  `json:"status"`
 }
 
 var _ = postResponse{}
@@ -246,11 +246,11 @@ func (h *PostsHandler) UpdatePost(c *gin.Context) {
 	if req.ImageURL != "" {
 		post.ImageURL = req.ImageURL
 	}
-	if req.Categories != "" {
-		post.Categories = req.Categories
+	if req.Categories != nil {
+		post.Categories = *req.Categories
 	}
-	if req.Tags != "" {
-		post.Tags = req.Tags
+	if req.Tags != nil {
+		post.Tags = *req.Tags
 	}
 	if req.Status != "" {
 		post.Status = req.Status

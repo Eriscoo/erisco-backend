@@ -15,6 +15,7 @@ import (
 	"github.com/eriscoo/blog-backend/internal/infrastructure/config"
 	"github.com/eriscoo/blog-backend/internal/infrastructure/persistence"
 	"github.com/eriscoo/blog-backend/internal/transport/router"
+	oghandler "github.com/eriscoo/blog-backend/internal/transport/handler/og"
 	uploadHandler "github.com/eriscoo/blog-backend/internal/transport/handler/upload"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -53,6 +54,7 @@ func main() {
 	postsSvc := postssvc.New(postRepo)
 	profileSvc := profilesvc.New(profileRepo)
 	uploadH := uploadHandler.New(cfg.UploadDir)
+	ogH := oghandler.New(postsSvc, cfg.SiteURL)
 
 	r := gin.Default()
 
@@ -67,7 +69,7 @@ func main() {
 
 	r.Static("/uploads", cfg.UploadDir)
 
-	router.Setup(r, authSvc, tagsSvc, catsSvc, postsSvc, profileSvc, uploadH, tokens)
+	router.Setup(r, authSvc, tagsSvc, catsSvc, postsSvc, profileSvc, uploadH, ogH, tokens)
 
 	if cfg.AppEnv != "production" {
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

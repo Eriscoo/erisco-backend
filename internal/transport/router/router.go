@@ -9,6 +9,7 @@ import (
 	tagssvc "github.com/eriscoo/blog-backend/internal/application/tags"
 	authhandler "github.com/eriscoo/blog-backend/internal/transport/handler/auth"
 	catHandler "github.com/eriscoo/blog-backend/internal/transport/handler/categories"
+	oghandler "github.com/eriscoo/blog-backend/internal/transport/handler/og"
 	postsHandler "github.com/eriscoo/blog-backend/internal/transport/handler/posts"
 	profileHandler "github.com/eriscoo/blog-backend/internal/transport/handler/profile"
 	tagshandler "github.com/eriscoo/blog-backend/internal/transport/handler/tags"
@@ -17,12 +18,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Setup(r *gin.Engine, authSvc *authsvc.Service, tagsSvc *tagssvc.Service, catsSvc *catsvc.Service, postsSvc *postssvc.Service, profileSvc *profilesvc.Service, uploadH *uploadHandler.UploadHandler, tokens application.TokenService) {
+func Setup(r *gin.Engine, authSvc *authsvc.Service, tagsSvc *tagssvc.Service, catsSvc *catsvc.Service, postsSvc *postssvc.Service, profileSvc *profilesvc.Service, uploadH *uploadHandler.UploadHandler, ogH *oghandler.OGHandler, tokens application.TokenService) {
 	authH := authhandler.New(authSvc)
 	tagsH := tagshandler.New(tagsSvc)
 	catsH := catHandler.New(catsSvc)
 	postsH := postsHandler.New(postsSvc)
 	profileH := profileHandler.New(profileSvc)
+
+	r.GET("/og/:slug", ogH.HandleOG)
 
 	v1 := r.Group("/api/v1")
 	{

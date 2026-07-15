@@ -14,6 +14,7 @@ type Config struct {
 	UploadDir     string
 	AppEnv        string
 	AllowOrigins  []string
+	SiteURL       string
 }
 
 func Load() *Config {
@@ -53,6 +54,12 @@ func Load() *Config {
 		}
 	}
 
+	siteURL := os.Getenv("SITE_URL")
+	if siteURL == "" {
+		siteURL = "http://localhost:5173"
+	}
+	siteURL = strings.TrimRight(siteURL, "/")
+
 	return &Config{
 		DatabaseURL:  dbURL,
 		JWTSecret:    jwtSecret,
@@ -60,5 +67,6 @@ func Load() *Config {
 		UploadDir:    uploadDir,
 		AppEnv:       appEnv,
 		AllowOrigins: allowOrigins,
+		SiteURL:      siteURL,
 	}
 }

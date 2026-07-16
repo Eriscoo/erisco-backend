@@ -54,7 +54,12 @@ func main() {
 	postsSvc := postssvc.New(postRepo)
 	profileSvc := profilesvc.New(profileRepo)
 	uploadH := uploadHandler.New(cfg.UploadDir)
-	ogH := oghandler.New(postsSvc, cfg.SiteURL)
+
+	pages, err := oghandler.LoadPages(cfg.OGPagesConfig)
+	if err != nil {
+		log.Fatalf("og pages config: %v", err)
+	}
+	ogH := oghandler.New(postsSvc, cfg.SiteURL, pages)
 
 	r := gin.Default()
 

@@ -26,6 +26,7 @@ func Setup(r *gin.Engine, authSvc *authsvc.Service, tagsSvc *tagssvc.Service, ca
 	profileH := profileHandler.New(profileSvc)
 
 	r.GET("/og/:slug", ogH.HandleOG)
+	r.GET("/og/page/:page", ogH.HandleStaticPage)
 
 	v1 := r.Group("/api/v1")
 	{

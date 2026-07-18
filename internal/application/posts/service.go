@@ -26,6 +26,18 @@ func (s *Service) GetAllPublished() ([]domain.Post, error) {
 	return s.repo.FindAllPublished()
 }
 
+func (s *Service) GetAllPublishedPaginated(offset, limit int) ([]domain.Post, int, error) {
+	return s.repo.FindAllPublishedPaginated(offset, limit)
+}
+
+func (s *Service) GetByCategory(categoryID int, offset, limit int) ([]domain.Post, int, error) {
+	return s.repo.FindAllByCategory(categoryID, offset, limit)
+}
+
+func (s *Service) GetByTag(tagID int, offset, limit int) ([]domain.Post, int, error) {
+	return s.repo.FindAllByTag(tagID, offset, limit)
+}
+
 func (s *Service) GetByID(id int) (*domain.Post, error) {
 	return s.repo.FindByID(id)
 }

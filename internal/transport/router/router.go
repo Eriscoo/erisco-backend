@@ -22,7 +22,7 @@ func Setup(r *gin.Engine, authSvc *authsvc.Service, tagsSvc *tagssvc.Service, ca
 	authH := authhandler.New(authSvc)
 	tagsH := tagshandler.New(tagsSvc)
 	catsH := catHandler.New(catsSvc)
-	postsH := postsHandler.New(postsSvc)
+	postsH := postsHandler.New(postsSvc, catsSvc, tagsSvc)
 	profileH := profileHandler.New(profileSvc)
 
 	r.GET("/og/:slug", ogH.HandleOG)
@@ -34,6 +34,8 @@ func Setup(r *gin.Engine, authSvc *authsvc.Service, tagsSvc *tagssvc.Service, ca
 		v1.POST("/login", authH.Login)
 		v1.GET("/public/posts/all", postsH.GetAllPublishedPosts)
 		v1.GET("/public/posts/:slug", postsH.GetPostBySlug)
+		v1.GET("/public/posts/categories/:name", postsH.GetPostsByCategory)
+		v1.GET("/public/posts/tags/:name", postsH.GetPostsByTag)
 
 		authorized := v1.Group("")
 		authorized.Use(middleware.AuthRequired(tokens))

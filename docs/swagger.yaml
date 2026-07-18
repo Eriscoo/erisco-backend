@@ -1,6 +1,53 @@
 basePath: /api/v1
 definitions:
-  github_com_eriscoo_blog-backend_internal_domain.UserProfile:
+  auth.loginReq:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  auth.registerReq:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        minLength: 6
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  categories.categoryResponse:
+    properties:
+      id:
+        example: 1
+        type: integer
+      name:
+        example: technology
+        type: string
+    type: object
+  categories.createCategoryReq:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  categories.updateCategoryReq:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  domain.UserProfile:
     properties:
       avatar_url:
         type: string
@@ -19,54 +66,7 @@ definitions:
       website:
         type: string
     type: object
-  internal_transport_handler_auth.loginReq:
-    properties:
-      email:
-        type: string
-      password:
-        type: string
-    required:
-    - email
-    - password
-    type: object
-  internal_transport_handler_auth.registerReq:
-    properties:
-      email:
-        type: string
-      name:
-        type: string
-      password:
-        minLength: 6
-        type: string
-    required:
-    - email
-    - name
-    - password
-    type: object
-  internal_transport_handler_categories.categoryResponse:
-    properties:
-      id:
-        example: 1
-        type: integer
-      name:
-        example: technology
-        type: string
-    type: object
-  internal_transport_handler_categories.createCategoryReq:
-    properties:
-      name:
-        type: string
-    required:
-    - name
-    type: object
-  internal_transport_handler_categories.updateCategoryReq:
-    properties:
-      name:
-        type: string
-    required:
-    - name
-    type: object
-  internal_transport_handler_posts.createPostReq:
+  posts.createPostReq:
     properties:
       body:
         type: string
@@ -85,7 +85,7 @@ definitions:
     required:
     - title
     type: object
-  internal_transport_handler_posts.postResponse:
+  posts.postResponse:
     properties:
       body:
         example: Post content here
@@ -124,7 +124,7 @@ definitions:
         example: "2026-07-12T00:00:00Z"
         type: string
     type: object
-  internal_transport_handler_posts.updatePostReq:
+  posts.updatePostReq:
     properties:
       body:
         type: string
@@ -141,7 +141,7 @@ definitions:
       title:
         type: string
     type: object
-  internal_transport_handler_profile.profileResponse:
+  profile.profileResponse:
     properties:
       avatar_url:
         example: /uploads/avatar.jpg
@@ -162,7 +162,7 @@ definitions:
         example: https://erisco.dev
         type: string
     type: object
-  internal_transport_handler_profile.updateProfileReq:
+  profile.updateProfileReq:
     properties:
       avatar_url:
         type: string
@@ -175,14 +175,14 @@ definitions:
       website:
         type: string
     type: object
-  internal_transport_handler_tags.createTagReq:
+  tags.createTagReq:
     properties:
       name:
         type: string
     required:
     - name
     type: object
-  internal_transport_handler_tags.tagResponse:
+  tags.tagResponse:
     properties:
       id:
         example: 1
@@ -191,7 +191,7 @@ definitions:
         example: golang
         type: string
     type: object
-  internal_transport_handler_tags.updateTagReq:
+  tags.updateTagReq:
     properties:
       name:
         type: string
@@ -215,7 +215,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/internal_transport_handler_categories.categoryResponse'
+              $ref: '#/definitions/categories.categoryResponse'
             type: array
         "500":
           description: Internal Server Error
@@ -236,14 +236,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/internal_transport_handler_categories.createCategoryReq'
+          $ref: '#/definitions/categories.createCategoryReq'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/internal_transport_handler_categories.categoryResponse'
+            $ref: '#/definitions/categories.categoryResponse'
         "400":
           description: Bad Request
           schema:
@@ -323,14 +323,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/internal_transport_handler_categories.updateCategoryReq'
+          $ref: '#/definitions/categories.updateCategoryReq'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/internal_transport_handler_categories.categoryResponse'
+            $ref: '#/definitions/categories.categoryResponse'
         "400":
           description: Bad Request
           schema:
@@ -371,7 +371,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/internal_transport_handler_auth.loginReq'
+          $ref: '#/definitions/auth.loginReq'
       produces:
       - application/json
       responses:
@@ -422,7 +422,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/internal_transport_handler_posts.postResponse'
+              $ref: '#/definitions/posts.postResponse'
             type: array
         "500":
           description: Internal Server Error
@@ -445,14 +445,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/internal_transport_handler_posts.createPostReq'
+          $ref: '#/definitions/posts.createPostReq'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/internal_transport_handler_posts.postResponse'
+            $ref: '#/definitions/posts.postResponse'
         "400":
           description: Bad Request
           schema:
@@ -531,7 +531,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/internal_transport_handler_posts.postResponse'
+            $ref: '#/definitions/posts.postResponse'
         "404":
           description: Not Found
           schema:
@@ -564,14 +564,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/internal_transport_handler_posts.updatePostReq'
+          $ref: '#/definitions/posts.updatePostReq'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/internal_transport_handler_posts.postResponse'
+            $ref: '#/definitions/posts.postResponse'
         "400":
           description: Bad Request
           schema:
@@ -616,7 +616,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/internal_transport_handler_profile.profileResponse'
+            $ref: '#/definitions/profile.profileResponse'
         "404":
           description: Not Found
           schema:
@@ -649,14 +649,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/internal_transport_handler_profile.updateProfileReq'
+          $ref: '#/definitions/profile.updateProfileReq'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_eriscoo_blog-backend_internal_domain.UserProfile'
+            $ref: '#/definitions/domain.UserProfile'
         "400":
           description: Bad Request
           schema:
@@ -695,7 +695,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/internal_transport_handler_posts.postResponse'
+            $ref: '#/definitions/posts.postResponse'
         "404":
           description: Not Found
           schema:
@@ -713,16 +713,24 @@ paths:
       - posts
   /public/posts/all:
     get:
-      description: Retrieve a list of all published posts (public)
+      description: Retrieve paginated list of all published posts (public)
+      parameters:
+      - description: Page number (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Items per page (default 10)
+        in: query
+        name: limit
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/internal_transport_handler_posts.postResponse'
-            type: array
+            additionalProperties: true
+            type: object
         "500":
           description: Internal Server Error
           schema:
@@ -730,6 +738,100 @@ paths:
               type: string
             type: object
       summary: Get all published posts
+      tags:
+      - posts
+  /public/posts/categories/{name}:
+    get:
+      description: Retrieve paginated list of published posts filtered by category
+        name (public)
+      parameters:
+      - description: Category name
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: Page number (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Items per page (default 10)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get published posts by category
+      tags:
+      - posts
+  /public/posts/tags/{name}:
+    get:
+      description: Retrieve paginated list of published posts filtered by tag name
+        (public)
+      parameters:
+      - description: Tag name
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: Page number (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Items per page (default 10)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get published posts by tag
       tags:
       - posts
   /register:
@@ -743,7 +845,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/internal_transport_handler_auth.registerReq'
+          $ref: '#/definitions/auth.registerReq'
       produces:
       - application/json
       responses:
@@ -778,7 +880,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/internal_transport_handler_tags.tagResponse'
+              $ref: '#/definitions/tags.tagResponse'
             type: array
         "500":
           description: Internal Server Error
@@ -799,14 +901,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/internal_transport_handler_tags.createTagReq'
+          $ref: '#/definitions/tags.createTagReq'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/internal_transport_handler_tags.tagResponse'
+            $ref: '#/definitions/tags.tagResponse'
         "400":
           description: Bad Request
           schema:
@@ -886,14 +988,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/internal_transport_handler_tags.updateTagReq'
+          $ref: '#/definitions/tags.updateTagReq'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/internal_transport_handler_tags.tagResponse'
+            $ref: '#/definitions/tags.tagResponse'
         "400":
           description: Bad Request
           schema:

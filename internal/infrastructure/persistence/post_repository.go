@@ -136,6 +136,207 @@ func (r *postRepository) FindAllPublished() ([]domain.Post, error) {
 	return posts, nil
 }
 
+func (r *postRepository) FindAllPublishedPaginated(offset, limit int) ([]domain.Post, int, error) {
+	var total int
+	err := r.db.QueryRow(`SELECT COUNT(*) FROM posts WHERE status = 'published'`).Scan(&total)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	if total == 0 {
+		return []domain.Post{}, 0, nil
+	}
+
+	rows, err := r.db.Query(`
+		SELECT p.id, p.title, p.slug, COALESCE(p.body, ''), COALESCE(p.image_url, ''),
+		       COALESCE(p.categories, ''), COALESCE(p.tags, ''), p.created_by, u.name,
+		       COALESCE(up.avatar_url, ''), p.status,
+		       p.published_at, p.created_at, p.updated_at
+		FROM posts p
+		JOIN users u ON u.id = p.created_by
+		LEFT JOIN user_profile up ON up.user_id = p.created_by
+		WHERE p.status = 'published'
+		ORDER BY p.created_at DESC
+		LIMIT $1 OFFSET $2
+	`, limit, offset)
+	if err != nil {
+		return nil, 0, err
+	}
+	defer rows.Close()
+
+	posts := make([]domain.Post, 0)
+	for rows.Next() {
+		var p domain.Post
+		if err := rows.Scan(
+			&p.ID, &p.Title, &p.Slug, &p.Body, &p.ImageURL,
+			&p.Categories, &p.Tags, &p.CreatedBy, &p.CreatedByName,
+			&p.AuthorAvatarURL,
+			&p.Status,
+			&p.PublishedAt, &p.CreatedAt, &p.UpdatedAt,
+		); err != nil {
+			return nil, 0, err
+		}
+		p.CreatedAt = toJakarta(p.CreatedAt)
+		p.UpdatedAt = toJakarta(p.UpdatedAt)
+		if p.PublishedAt != nil {
+			t := toJakarta(*p.PublishedAt)
+			p.PublishedAt = &t
+		}
+		posts = append(posts, p)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, 0, err
+	}
+
+	if err := r.populateCategoryNames(posts); err != nil {
+		return nil, 0, err
+	}
+	if err := r.populateTagNames(posts); err != nil {
+		return nil, 0, err
+	}
+
+	return posts, total, nil
+}
+
+func (r *postRepository) FindAllByCategory(categoryID int, offset, limit int) ([]domain.Post, int, error) {
+	var total int
+	err := r.db.QueryRow(`
+		SELECT COUNT(*)
+		FROM posts p
+		WHERE p.status = 'published'
+		  AND (',' || p.categories || ',') LIKE '%,' || $1 || ',%'
+	`, categoryID).Scan(&total)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	if total == 0 {
+		return []domain.Post{}, 0, nil
+	}
+
+	rows, err := r.db.Query(`
+		SELECT p.id, p.title, p.slug, COALESCE(p.body, ''), COALESCE(p.image_url, ''),
+		       COALESCE(p.categories, ''), COALESCE(p.tags, ''), p.created_by, u.name,
+		       COALESCE(up.avatar_url, ''), p.status,
+		       p.published_at, p.created_at, p.updated_at
+		FROM posts p
+		JOIN users u ON u.id = p.created_by
+		LEFT JOIN user_profile up ON up.user_id = p.created_by
+		WHERE p.status = 'published'
+		  AND (',' || p.categories || ',') LIKE '%,' || $1 || ',%'
+		ORDER BY p.created_at DESC
+		LIMIT $2 OFFSET $3
+	`, categoryID, limit, offset)
+	if err != nil {
+		return nil, 0, err
+	}
+	defer rows.Close()
+
+	posts := make([]domain.Post, 0)
+	for rows.Next() {
+		var p domain.Post
+		if err := rows.Scan(
+			&p.ID, &p.Title, &p.Slug, &p.Body, &p.ImageURL,
+			&p.Categories, &p.Tags, &p.CreatedBy, &p.CreatedByName,
+			&p.AuthorAvatarURL,
+			&p.Status,
+			&p.PublishedAt, &p.CreatedAt, &p.UpdatedAt,
+		); err != nil {
+			return nil, 0, err
+		}
+		p.CreatedAt = toJakarta(p.CreatedAt)
+		p.UpdatedAt = toJakarta(p.UpdatedAt)
+		if p.PublishedAt != nil {
+			t := toJakarta(*p.PublishedAt)
+			p.PublishedAt = &t
+		}
+		posts = append(posts, p)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, 0, err
+	}
+
+	if err := r.populateCategoryNames(posts); err != nil {
+		return nil, 0, err
+	}
+	if err := r.populateTagNames(posts); err != nil {
+		return nil, 0, err
+	}
+
+	return posts, total, nil
+}
+
+func (r *postRepository) FindAllByTag(tagID int, offset, limit int) ([]domain.Post, int, error) {
+	var total int
+	err := r.db.QueryRow(`
+		SELECT COUNT(*)
+		FROM posts p
+		WHERE p.status = 'published'
+		  AND (',' || p.tags || ',') LIKE '%,' || $1 || ',%'
+	`, tagID).Scan(&total)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	if total == 0 {
+		return []domain.Post{}, 0, nil
+	}
+
+	rows, err := r.db.Query(`
+		SELECT p.id, p.title, p.slug, COALESCE(p.body, ''), COALESCE(p.image_url, ''),
+		       COALESCE(p.categories, ''), COALESCE(p.tags, ''), p.created_by, u.name,
+		       COALESCE(up.avatar_url, ''), p.status,
+		       p.published_at, p.created_at, p.updated_at
+		FROM posts p
+		JOIN users u ON u.id = p.created_by
+		LEFT JOIN user_profile up ON up.user_id = p.created_by
+		WHERE p.status = 'published'
+		  AND (',' || p.tags || ',') LIKE '%,' || $1 || ',%'
+		ORDER BY p.created_at DESC
+		LIMIT $2 OFFSET $3
+	`, tagID, limit, offset)
+	if err != nil {
+		return nil, 0, err
+	}
+	defer rows.Close()
+
+	posts := make([]domain.Post, 0)
+	for rows.Next() {
+		var p domain.Post
+		if err := rows.Scan(
+			&p.ID, &p.Title, &p.Slug, &p.Body, &p.ImageURL,
+			&p.Categories, &p.Tags, &p.CreatedBy, &p.CreatedByName,
+			&p.AuthorAvatarURL,
+			&p.Status,
+			&p.PublishedAt, &p.CreatedAt, &p.UpdatedAt,
+		); err != nil {
+			return nil, 0, err
+		}
+		p.CreatedAt = toJakarta(p.CreatedAt)
+		p.UpdatedAt = toJakarta(p.UpdatedAt)
+		if p.PublishedAt != nil {
+			t := toJakarta(*p.PublishedAt)
+			p.PublishedAt = &t
+		}
+		posts = append(posts, p)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, 0, err
+	}
+
+	if err := r.populateCategoryNames(posts); err != nil {
+		return nil, 0, err
+	}
+	if err := r.populateTagNames(posts); err != nil {
+		return nil, 0, err
+	}
+
+	return posts, total, nil
+}
+
 func (r *postRepository) populateCategoryNames(posts []domain.Post) error {
 	catRows, err := r.db.Query("SELECT id, name FROM categories")
 	if err != nil {

@@ -17,6 +17,10 @@ func (s *Service) GetAll() ([]domain.Category, error) {
 	return s.repo.FindAll()
 }
 
+func (s *Service) GetByName(name string) (*domain.Category, error) {
+	return s.repo.FindByName(name)
+}
+
 func (s *Service) Create(name string) (domain.Category, error) {
 	return s.repo.Create(name)
 }

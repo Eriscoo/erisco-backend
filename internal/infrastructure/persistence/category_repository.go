@@ -33,6 +33,17 @@ func (r *categoryRepository) FindAll() ([]domain.Category, error) {
 	return categories, rows.Err()
 }
 
+func (r *categoryRepository) FindByName(name string) (*domain.Category, error) {
+	var c domain.Category
+	err := r.db.QueryRow(
+		"SELECT id, name FROM categories WHERE name = $1", name,
+	).Scan(&c.ID, &c.Name)
+	if err == sql.ErrNoRows {
+		return nil, domain.ErrNotFound
+	}
+	return &c, err
+}
+
 func (r *categoryRepository) Create(name string) (domain.Category, error) {
 	var c domain.Category
 	err := r.db.QueryRow(

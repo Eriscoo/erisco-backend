@@ -17,6 +17,10 @@ func (s *Service) GetAll() ([]domain.Tag, error) {
 	return s.repo.FindAll()
 }
 
+func (s *Service) GetByName(name string) (*domain.Tag, error) {
+	return s.repo.FindByName(name)
+}
+
 func (s *Service) Create(name string) (domain.Tag, error) {
 	return s.repo.Create(name)
 }

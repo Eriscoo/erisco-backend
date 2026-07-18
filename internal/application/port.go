@@ -10,6 +10,7 @@ type UserRepository interface {
 
 type TagRepository interface {
 	FindAll() ([]domain.Tag, error)
+	FindByName(name string) (*domain.Tag, error)
 	Create(name string) (domain.Tag, error)
 	Update(id int, name string) error
 	Delete(id int) error
@@ -17,6 +18,7 @@ type TagRepository interface {
 
 type CategoryRepository interface {
 	FindAll() ([]domain.Category, error)
+	FindByName(name string) (*domain.Category, error)
 	Create(name string) (domain.Category, error)
 	Update(id int, name string) error
 	Delete(id int) error
@@ -25,6 +27,9 @@ type CategoryRepository interface {
 type PostRepository interface {
 	FindAll() ([]domain.Post, error)
 	FindAllPublished() ([]domain.Post, error)
+	FindAllPublishedPaginated(offset, limit int) ([]domain.Post, int, error)
+	FindAllByCategory(categoryID int, offset, limit int) ([]domain.Post, int, error)
+	FindAllByTag(tagID int, offset, limit int) ([]domain.Post, int, error)
 	FindByID(id int) (*domain.Post, error)
 	FindBySlug(slug string) (*domain.Post, error)
 	Create(post *domain.Post) error

@@ -31,7 +31,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/internal_transport_handler_categories.categoryResponse"
+                                "$ref": "#/definitions/categories.categoryResponse"
                             }
                         }
                     },
@@ -70,7 +70,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_handler_categories.createCategoryReq"
+                            "$ref": "#/definitions/categories.createCategoryReq"
                         }
                     }
                 ],
@@ -78,7 +78,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_handler_categories.categoryResponse"
+                            "$ref": "#/definitions/categories.categoryResponse"
                         }
                     },
                     "400": {
@@ -143,7 +143,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_handler_categories.updateCategoryReq"
+                            "$ref": "#/definitions/categories.updateCategoryReq"
                         }
                     }
                 ],
@@ -151,7 +151,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_handler_categories.categoryResponse"
+                            "$ref": "#/definitions/categories.categoryResponse"
                         }
                     },
                     "400": {
@@ -275,7 +275,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_handler_auth.loginReq"
+                            "$ref": "#/definitions/auth.loginReq"
                         }
                     }
                 ],
@@ -357,7 +357,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/internal_transport_handler_posts.postResponse"
+                                "$ref": "#/definitions/posts.postResponse"
                             }
                         }
                     },
@@ -396,7 +396,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_handler_posts.createPostReq"
+                            "$ref": "#/definitions/posts.createPostReq"
                         }
                     }
                 ],
@@ -404,7 +404,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_handler_posts.postResponse"
+                            "$ref": "#/definitions/posts.postResponse"
                         }
                     },
                     "400": {
@@ -465,7 +465,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_handler_posts.postResponse"
+                            "$ref": "#/definitions/posts.postResponse"
                         }
                     },
                     "404": {
@@ -519,7 +519,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_handler_posts.updatePostReq"
+                            "$ref": "#/definitions/posts.updatePostReq"
                         }
                     }
                 ],
@@ -527,7 +527,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_handler_posts.postResponse"
+                            "$ref": "#/definitions/posts.postResponse"
                         }
                     },
                     "400": {
@@ -659,7 +659,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_handler_profile.profileResponse"
+                            "$ref": "#/definitions/profile.profileResponse"
                         }
                     },
                     "404": {
@@ -713,7 +713,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_handler_profile.updateProfileReq"
+                            "$ref": "#/definitions/profile.updateProfileReq"
                         }
                     }
                 ],
@@ -721,7 +721,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_eriscoo_blog-backend_internal_domain.UserProfile"
+                            "$ref": "#/definitions/domain.UserProfile"
                         }
                     },
                     "400": {
@@ -756,7 +756,7 @@ const docTemplate = `{
         },
         "/public/posts/all": {
             "get": {
-                "description": "Retrieve a list of all published posts (public)",
+                "description": "Retrieve paginated list of all published posts (public)",
                 "produces": [
                     "application/json"
                 ],
@@ -764,13 +764,163 @@ const docTemplate = `{
                     "posts"
                 ],
                 "summary": "Get all published posts",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number (default 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Items per page (default 10)",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/internal_transport_handler_posts.postResponse"
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/public/posts/categories/{name}": {
+            "get": {
+                "description": "Retrieve paginated list of published posts filtered by category name (public)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "posts"
+                ],
+                "summary": "Get published posts by category",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Category name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number (default 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Items per page (default 10)",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/public/posts/tags/{name}": {
+            "get": {
+                "description": "Retrieve paginated list of published posts filtered by tag name (public)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "posts"
+                ],
+                "summary": "Get published posts by tag",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Tag name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number (default 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Items per page (default 10)",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
                             }
                         }
                     },
@@ -809,7 +959,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_handler_posts.postResponse"
+                            "$ref": "#/definitions/posts.postResponse"
                         }
                     },
                     "404": {
@@ -853,7 +1003,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_handler_auth.registerReq"
+                            "$ref": "#/definitions/auth.registerReq"
                         }
                     }
                 ],
@@ -904,7 +1054,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/internal_transport_handler_tags.tagResponse"
+                                "$ref": "#/definitions/tags.tagResponse"
                             }
                         }
                     },
@@ -943,7 +1093,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_handler_tags.createTagReq"
+                            "$ref": "#/definitions/tags.createTagReq"
                         }
                     }
                 ],
@@ -951,7 +1101,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_handler_tags.tagResponse"
+                            "$ref": "#/definitions/tags.tagResponse"
                         }
                     },
                     "400": {
@@ -1016,7 +1166,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_handler_tags.updateTagReq"
+                            "$ref": "#/definitions/tags.updateTagReq"
                         }
                     }
                 ],
@@ -1024,7 +1174,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_handler_tags.tagResponse"
+                            "$ref": "#/definitions/tags.tagResponse"
                         }
                     },
                     "400": {
@@ -1188,7 +1338,77 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "github_com_eriscoo_blog-backend_internal_domain.UserProfile": {
+        "auth.loginReq": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.registerReq": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 6
+                }
+            }
+        },
+        "categories.categoryResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "technology"
+                }
+            }
+        },
+        "categories.createCategoryReq": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "categories.updateCategoryReq": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.UserProfile": {
             "type": "object",
             "properties": {
                 "avatar_url": {
@@ -1217,77 +1437,7 @@ const docTemplate = `{
                 }
             }
         },
-        "internal_transport_handler_auth.loginReq": {
-            "type": "object",
-            "required": [
-                "email",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "internal_transport_handler_auth.registerReq": {
-            "type": "object",
-            "required": [
-                "email",
-                "name",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string",
-                    "minLength": 6
-                }
-            }
-        },
-        "internal_transport_handler_categories.categoryResponse": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "name": {
-                    "type": "string",
-                    "example": "technology"
-                }
-            }
-        },
-        "internal_transport_handler_categories.createCategoryReq": {
-            "type": "object",
-            "required": [
-                "name"
-            ],
-            "properties": {
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "internal_transport_handler_categories.updateCategoryReq": {
-            "type": "object",
-            "required": [
-                "name"
-            ],
-            "properties": {
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "internal_transport_handler_posts.createPostReq": {
+        "posts.createPostReq": {
             "type": "object",
             "required": [
                 "title"
@@ -1316,7 +1466,7 @@ const docTemplate = `{
                 }
             }
         },
-        "internal_transport_handler_posts.postResponse": {
+        "posts.postResponse": {
             "type": "object",
             "properties": {
                 "body": {
@@ -1369,7 +1519,7 @@ const docTemplate = `{
                 }
             }
         },
-        "internal_transport_handler_posts.updatePostReq": {
+        "posts.updatePostReq": {
             "type": "object",
             "properties": {
                 "body": {
@@ -1395,7 +1545,7 @@ const docTemplate = `{
                 }
             }
         },
-        "internal_transport_handler_profile.profileResponse": {
+        "profile.profileResponse": {
             "type": "object",
             "properties": {
                 "avatar_url": {
@@ -1424,7 +1574,7 @@ const docTemplate = `{
                 }
             }
         },
-        "internal_transport_handler_profile.updateProfileReq": {
+        "profile.updateProfileReq": {
             "type": "object",
             "properties": {
                 "avatar_url": {
@@ -1444,7 +1594,7 @@ const docTemplate = `{
                 }
             }
         },
-        "internal_transport_handler_tags.createTagReq": {
+        "tags.createTagReq": {
             "type": "object",
             "required": [
                 "name"
@@ -1455,7 +1605,7 @@ const docTemplate = `{
                 }
             }
         },
-        "internal_transport_handler_tags.tagResponse": {
+        "tags.tagResponse": {
             "type": "object",
             "properties": {
                 "id": {
@@ -1468,7 +1618,7 @@ const docTemplate = `{
                 }
             }
         },
-        "internal_transport_handler_tags.updateTagReq": {
+        "tags.updateTagReq": {
             "type": "object",
             "required": [
                 "name"

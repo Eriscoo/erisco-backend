@@ -33,6 +33,17 @@ func (r *tagRepository) FindAll() ([]domain.Tag, error) {
 	return tags, rows.Err()
 }
 
+func (r *tagRepository) FindByName(name string) (*domain.Tag, error) {
+	var t domain.Tag
+	err := r.db.QueryRow(
+		"SELECT id, name FROM tags WHERE name = $1", name,
+	).Scan(&t.ID, &t.Name)
+	if err == sql.ErrNoRows {
+		return nil, domain.ErrNotFound
+	}
+	return &t, err
+}
+
 func (r *tagRepository) Create(name string) (domain.Tag, error) {
 	var t domain.Tag
 	err := r.db.QueryRow(

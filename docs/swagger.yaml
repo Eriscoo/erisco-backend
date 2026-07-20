@@ -47,6 +47,24 @@ definitions:
     required:
     - name
     type: object
+  contact.contactReq:
+    properties:
+      cf-turnstile-response:
+        type: string
+      email:
+        type: string
+      message:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      subject:
+        type: string
+    required:
+    - cf-turnstile-response
+    - email
+    type: object
   domain.UserProfile:
     properties:
       avatar_url:
@@ -360,6 +378,36 @@ paths:
       summary: Update a category
       tags:
       - categories
+  /contact:
+    post:
+      consumes:
+      - application/json
+      description: Send a message via the contact form (protected by Turnstile)
+      parameters:
+      - description: Contact message
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/contact.contactReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Submit contact form
+      tags:
+      - contact
   /login:
     post:
       consumes:

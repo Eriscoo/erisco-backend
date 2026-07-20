@@ -8,4 +8,5 @@ var (
 	ErrUserNotFound       = errors.New("user not found")
 	ErrNotFound           = errors.New("not found")
 	ErrDuplicateEntry     = errors.New("duplicate entry")
+	ErrSpamDetected       = errors.New("spam detected")
 )

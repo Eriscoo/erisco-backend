@@ -4,11 +4,13 @@ import (
 	"github.com/eriscoo/blog-backend/internal/application"
 	authsvc "github.com/eriscoo/blog-backend/internal/application/auth"
 	catsvc "github.com/eriscoo/blog-backend/internal/application/categories"
+	contactsvc "github.com/eriscoo/blog-backend/internal/application/contact"
 	postssvc "github.com/eriscoo/blog-backend/internal/application/posts"
 	profilesvc "github.com/eriscoo/blog-backend/internal/application/profile"
 	tagssvc "github.com/eriscoo/blog-backend/internal/application/tags"
 	authhandler "github.com/eriscoo/blog-backend/internal/transport/handler/auth"
 	catHandler "github.com/eriscoo/blog-backend/internal/transport/handler/categories"
+	contactHandler "github.com/eriscoo/blog-backend/internal/transport/handler/contact"
 	oghandler "github.com/eriscoo/blog-backend/internal/transport/handler/og"
 	postsHandler "github.com/eriscoo/blog-backend/internal/transport/handler/posts"
 	profileHandler "github.com/eriscoo/blog-backend/internal/transport/handler/profile"
@@ -18,12 +20,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Setup(r *gin.Engine, authSvc *authsvc.Service, tagsSvc *tagssvc.Service, catsSvc *catsvc.Service, postsSvc *postssvc.Service, profileSvc *profilesvc.Service, uploadH *uploadHandler.UploadHandler, ogH *oghandler.OGHandler, tokens application.TokenService) {
+func Setup(r *gin.Engine, authSvc *authsvc.Service, tagsSvc *tagssvc.Service, catsSvc *catsvc.Service, postsSvc *postssvc.Service, profileSvc *profilesvc.Service, contactSvc *contactsvc.Service, uploadH *uploadHandler.UploadHandler, ogH *oghandler.OGHandler, tokens application.TokenService) {
 	authH := authhandler.New(authSvc)
 	tagsH := tagshandler.New(tagsSvc)
 	catsH := catHandler.New(catsSvc)
 	postsH := postsHandler.New(postsSvc, catsSvc, tagsSvc)
 	profileH := profileHandler.New(profileSvc)
+	contactH := contactHandler.New(contactSvc)
 
 	r.GET("/og/:slug", ogH.HandleOG)
 	r.GET("/og/page/:page", ogH.HandleStaticPage)
@@ -36,6 +39,7 @@ func Setup(r *gin.Engine, authSvc *authsvc.Service, tagsSvc *tagssvc.Service, ca
 		v1.GET("/public/posts/:slug", postsH.GetPostBySlug)
 		v1.GET("/public/posts/categories/:name", postsH.GetPostsByCategory)
 		v1.GET("/public/posts/tags/:name", postsH.GetPostsByTag)
+		v1.POST("/contact", contactH.Submit)
 
 		authorized := v1.Group("")
 		authorized.Use(middleware.AuthRequired(tokens))

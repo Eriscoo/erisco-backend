@@ -42,6 +42,10 @@ type UserProfileRepository interface {
 	Upsert(profile *domain.UserProfile) error
 }
 
+type ContactRepository interface {
+	Create(msg *domain.ContactMessage) error
+}
+
 type TokenService interface {
 	Generate(userID int, name string) (string, error)
 	Validate(tokenString string) (int, error)

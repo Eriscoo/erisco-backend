@@ -109,7 +109,7 @@ func (h *OGHandler) HandleStaticPage(c *gin.Context) {
 		imageURL = h.siteURL + meta.Image
 	}
 
-	h.renderHTML(c, title, description, url, imageURL, "website", "")
+	h.renderHTML(c, title, description, url, imageURL, "website", ogImageAlt(imageURL, title))
 }
 
 func (h *OGHandler) renderHTML(c *gin.Context, title, description, url, imageURL, ogType, extra string) {

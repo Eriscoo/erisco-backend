@@ -1,22 +1,32 @@
 {
-  "portfolio": {
-    "title": "Portfolio | Eriscoo",
-    "description": "My projects, work, and side builds.",
-    "image": "/og-image.jpg"
-  },
   "about": {
     "title": "About | Eriscoo",
     "description": "Learn more about me and what I do.",
-    "image": "/og-image.jpg"
+    "image": "/og-about.jpg"
   },
-  "terms": {
-    "title": "Terms of Service | Eriscoo",
+  "portfolio": {
+    "title": "Portfolio | Eriscoo",
+    "description": "My portfolio for projects, work, or side builds.",
+    "image": "/og-portfolio.jpg"
+  },
+  "posts": {
+    "title": "Posts | Eriscoo",
+    "description": "Read my latest thoughts, articles, and technical write-ups.",
+    "image": "/og-posts.jpg"
+  },
+  "contact": {
+    "title": "Contact | Eriscoo",
+    "description": "Get in touch with me for inquiries, collaborations, or just to say hi.",
+    "image": "/og-contact.jpg"
+  },
+  "terms-and-conditions": {
+    "title": "Terms And Conditions | Eriscoo",
     "description": "Terms and conditions for using this website.",
-    "image": "/og-image.jpg"
+    "image": "/og-terms-and-conditions.jpg"
   },
-  "privacy": {
+  "privacy-policy": {
     "title": "Privacy Policy | Eriscoo",
     "description": "How your data is collected and used on this site.",
-    "image": "/og-image.jpg"
+    "image": "/og-privacy-policy.jpg"
   }
 }

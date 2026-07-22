@@ -81,11 +81,13 @@ func (h *OGHandler) HandleOG(c *gin.Context) {
 		publishedAt = post.CreatedAt.Format(time.RFC3339)
 	}
 
+	bodyContent := `<h1>` + title + `</h1>` + "\n" + post.Body
+
 	extra := ogImageAlt(imageURL, title) + "\n" +
 		`<meta property="article:published_time" content="` + publishedAt + `">` + "\n" +
 		ogTags(tags)
 
-	h.renderHTML(c, title, description, url, imageURL, "article", extra)
+	h.renderHTML(c, title, description, url, imageURL, "article", extra, bodyContent)
 }
 
 func (h *OGHandler) HandleStaticPage(c *gin.Context) {
@@ -109,10 +111,12 @@ func (h *OGHandler) HandleStaticPage(c *gin.Context) {
 		imageURL = h.siteURL + meta.Image
 	}
 
-	h.renderHTML(c, title, description, url, imageURL, "website", ogImageAlt(imageURL, title))
+	bodyContent := `<h1>` + title + `</h1>` + "\n" + `<p>` + description + `</p>`
+
+	h.renderHTML(c, title, description, url, imageURL, "website", ogImageAlt(imageURL, title), bodyContent)
 }
 
-func (h *OGHandler) renderHTML(c *gin.Context, title, description, url, imageURL, ogType, extra string) {
+func (h *OGHandler) renderHTML(c *gin.Context, title, description, url, imageURL, ogType, extra, bodyContent string) {
 	c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(`<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -135,17 +139,23 @@ func (h *OGHandler) renderHTML(c *gin.Context, title, description, url, imageURL
 <meta name="twitter:image" content="` + imageURL + `">
 <link rel="canonical" href="` + url + `">
 </head>
-<body></body>
+<body>
+` + bodyContent + `
+</body>
 </html>`))
+}
+
+func stripHTML(body string) string {
+	text := reTags.ReplaceAllString(body, "")
+	text = strings.TrimSpace(text)
+	return strings.Join(strings.Fields(text), " ")
 }
 
 func stripAndTruncate(body string, maxLen int) string {
 	if body == "" {
 		return ""
 	}
-	text := reTags.ReplaceAllString(body, "")
-	text = strings.TrimSpace(text)
-	text = strings.Join(strings.Fields(text), " ")
+	text := stripHTML(body)
 	if len([]rune(text)) > maxLen {
 		runes := []rune(text)
 		return string(runes[:maxLen]) + "..."

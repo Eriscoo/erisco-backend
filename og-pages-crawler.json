@@ -1,32 +1,32 @@
 {
   "about": {
-    "title": "About | Eriscoo",
-    "description": "Learn more about me and what I do.",
+    "title": "About Me",
+    "description": "Learn more about my background, skills, passion for technology, and the journey that drives my professional work.",
     "image": "/og-about.jpg"
   },
   "portfolio": {
-    "title": "Portfolio | Eriscoo",
-    "description": "My portfolio for projects, work, or side builds.",
+    "title": "My Portfolio",
+    "description": "Explore a curated collection of my best projects, work histories, case studies, and creative side experiments.",
     "image": "/og-portfolio.jpg"
   },
   "posts": {
-    "title": "Posts | Eriscoo",
-    "description": "Read my latest thoughts, articles, and technical write-ups.",
+    "title": "All Posts",
+    "description": "Discover my latest articles, technical tutorials, and personal reflections on software and design.",
     "image": "/og-posts.jpg"
   },
   "contact": {
-    "title": "Contact | Eriscoo",
-    "description": "Get in touch with me for inquiries, collaborations, or just to say hi.",
+    "title": "Contact Me",
+    "description": "Have a project in mind, a question, or just want to connect? Reach out to me directly and let's start a conversation.",
     "image": "/og-contact.jpg"
   },
   "terms-and-conditions": {
-    "title": "Terms And Conditions | Eriscoo",
-    "description": "Terms and conditions for using this website.",
+    "title": "Terms And Conditions",
+    "description": "Read the guidelines, rules, and legal agreements governing the use of this website and its content.",
     "image": "/og-terms-and-conditions.jpg"
   },
   "privacy-policy": {
-    "title": "Privacy Policy | Eriscoo",
-    "description": "How your data is collected and used on this site.",
+    "title": "Privacy Policy",
+    "description": "Understand how your personal information is collected, stored, protected, and used when you visit this site.",
     "image": "/og-privacy-policy.jpg"
   }
 }

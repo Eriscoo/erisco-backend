@@ -19,6 +19,7 @@ import (
 	"github.com/eriscoo/blog-backend/internal/infrastructure/turnstile"
 	"github.com/eriscoo/blog-backend/internal/transport/router"
 	oghandler "github.com/eriscoo/blog-backend/internal/transport/handler/og"
+	sitemapHandler "github.com/eriscoo/blog-backend/internal/transport/handler/sitemap"
 	uploadHandler "github.com/eriscoo/blog-backend/internal/transport/handler/upload"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -76,6 +77,7 @@ func main() {
 		log.Fatalf("og pages config: %v", err)
 	}
 	ogH := oghandler.New(postsSvc, cfg.SiteURL, pages)
+	smH := sitemapHandler.New(postsSvc, cfg.SiteURL, pages)
 
 	r := gin.Default()
 
@@ -90,7 +92,7 @@ func main() {
 
 	r.Static("/uploads", cfg.UploadDir)
 
-	router.Setup(r, authSvc, tagsSvc, catsSvc, postsSvc, profileSvc, contactSvc, uploadH, ogH, tokens)
+	router.Setup(r, authSvc, tagsSvc, catsSvc, postsSvc, profileSvc, contactSvc, uploadH, ogH, smH, tokens)
 
 	if cfg.AppEnv != "production" {
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

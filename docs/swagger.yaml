@@ -1,71 +1,6 @@
 basePath: /api/v1
 definitions:
-  auth.loginReq:
-    properties:
-      email:
-        type: string
-      password:
-        type: string
-    required:
-    - email
-    - password
-    type: object
-  auth.registerReq:
-    properties:
-      email:
-        type: string
-      name:
-        type: string
-      password:
-        minLength: 6
-        type: string
-    required:
-    - email
-    - name
-    - password
-    type: object
-  categories.categoryResponse:
-    properties:
-      id:
-        example: 1
-        type: integer
-      name:
-        example: technology
-        type: string
-    type: object
-  categories.createCategoryReq:
-    properties:
-      name:
-        type: string
-    required:
-    - name
-    type: object
-  categories.updateCategoryReq:
-    properties:
-      name:
-        type: string
-    required:
-    - name
-    type: object
-  contact.contactReq:
-    properties:
-      cf-turnstile-response:
-        type: string
-      email:
-        type: string
-      message:
-        type: string
-      name:
-        type: string
-      phone:
-        type: string
-      subject:
-        type: string
-    required:
-    - cf-turnstile-response
-    - email
-    type: object
-  domain.UserProfile:
+  github_com_eriscoo_blog-backend_internal_domain.UserProfile:
     properties:
       avatar_url:
         type: string
@@ -84,7 +19,72 @@ definitions:
       website:
         type: string
     type: object
-  posts.createPostReq:
+  internal_transport_handler_auth.loginReq:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  internal_transport_handler_auth.registerReq:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        minLength: 6
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  internal_transport_handler_categories.categoryResponse:
+    properties:
+      id:
+        example: 1
+        type: integer
+      name:
+        example: technology
+        type: string
+    type: object
+  internal_transport_handler_categories.createCategoryReq:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  internal_transport_handler_categories.updateCategoryReq:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  internal_transport_handler_contact.contactReq:
+    properties:
+      cf-turnstile-response:
+        type: string
+      email:
+        type: string
+      message:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      subject:
+        type: string
+    required:
+    - cf-turnstile-response
+    - email
+    type: object
+  internal_transport_handler_posts.createPostReq:
     properties:
       body:
         type: string
@@ -103,7 +103,7 @@ definitions:
     required:
     - title
     type: object
-  posts.postResponse:
+  internal_transport_handler_posts.postResponse:
     properties:
       body:
         example: Post content here
@@ -142,7 +142,7 @@ definitions:
         example: "2026-07-12T00:00:00Z"
         type: string
     type: object
-  posts.updatePostReq:
+  internal_transport_handler_posts.updatePostReq:
     properties:
       body:
         type: string
@@ -159,7 +159,7 @@ definitions:
       title:
         type: string
     type: object
-  profile.profileResponse:
+  internal_transport_handler_profile.profileResponse:
     properties:
       avatar_url:
         example: /uploads/avatar.jpg
@@ -180,7 +180,7 @@ definitions:
         example: https://erisco.dev
         type: string
     type: object
-  profile.updateProfileReq:
+  internal_transport_handler_profile.updateProfileReq:
     properties:
       avatar_url:
         type: string
@@ -193,14 +193,14 @@ definitions:
       website:
         type: string
     type: object
-  tags.createTagReq:
+  internal_transport_handler_tags.createTagReq:
     properties:
       name:
         type: string
     required:
     - name
     type: object
-  tags.tagResponse:
+  internal_transport_handler_tags.tagResponse:
     properties:
       id:
         example: 1
@@ -209,7 +209,7 @@ definitions:
         example: golang
         type: string
     type: object
-  tags.updateTagReq:
+  internal_transport_handler_tags.updateTagReq:
     properties:
       name:
         type: string
@@ -233,7 +233,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/categories.categoryResponse'
+              $ref: '#/definitions/internal_transport_handler_categories.categoryResponse'
             type: array
         "500":
           description: Internal Server Error
@@ -254,14 +254,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/categories.createCategoryReq'
+          $ref: '#/definitions/internal_transport_handler_categories.createCategoryReq'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/categories.categoryResponse'
+            $ref: '#/definitions/internal_transport_handler_categories.categoryResponse'
         "400":
           description: Bad Request
           schema:
@@ -341,14 +341,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/categories.updateCategoryReq'
+          $ref: '#/definitions/internal_transport_handler_categories.updateCategoryReq'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/categories.categoryResponse'
+            $ref: '#/definitions/internal_transport_handler_categories.categoryResponse'
         "400":
           description: Bad Request
           schema:
@@ -389,7 +389,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/contact.contactReq'
+          $ref: '#/definitions/internal_transport_handler_contact.contactReq'
       produces:
       - application/json
       responses:
@@ -419,7 +419,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/auth.loginReq'
+          $ref: '#/definitions/internal_transport_handler_auth.loginReq'
       produces:
       - application/json
       responses:
@@ -470,7 +470,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/posts.postResponse'
+              $ref: '#/definitions/internal_transport_handler_posts.postResponse'
             type: array
         "500":
           description: Internal Server Error
@@ -493,14 +493,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/posts.createPostReq'
+          $ref: '#/definitions/internal_transport_handler_posts.createPostReq'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/posts.postResponse'
+            $ref: '#/definitions/internal_transport_handler_posts.postResponse'
         "400":
           description: Bad Request
           schema:
@@ -579,7 +579,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/posts.postResponse'
+            $ref: '#/definitions/internal_transport_handler_posts.postResponse'
         "404":
           description: Not Found
           schema:
@@ -612,14 +612,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/posts.updatePostReq'
+          $ref: '#/definitions/internal_transport_handler_posts.updatePostReq'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/posts.postResponse'
+            $ref: '#/definitions/internal_transport_handler_posts.postResponse'
         "400":
           description: Bad Request
           schema:
@@ -664,7 +664,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/profile.profileResponse'
+            $ref: '#/definitions/internal_transport_handler_profile.profileResponse'
         "404":
           description: Not Found
           schema:
@@ -697,14 +697,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/profile.updateProfileReq'
+          $ref: '#/definitions/internal_transport_handler_profile.updateProfileReq'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.UserProfile'
+            $ref: '#/definitions/github_com_eriscoo_blog-backend_internal_domain.UserProfile'
         "400":
           description: Bad Request
           schema:
@@ -743,7 +743,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/posts.postResponse'
+            $ref: '#/definitions/internal_transport_handler_posts.postResponse'
         "404":
           description: Not Found
           schema:
@@ -893,7 +893,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/auth.registerReq'
+          $ref: '#/definitions/internal_transport_handler_auth.registerReq'
       produces:
       - application/json
       responses:
@@ -918,6 +918,19 @@ paths:
       summary: Register a new user
       tags:
       - auth
+  /sitemap.xml:
+    get:
+      description: Returns XML sitemap for all published posts and static pages
+      produces:
+      - text/xml
+      responses:
+        "200":
+          description: XML sitemap
+          schema:
+            type: string
+      summary: Get sitemap
+      tags:
+      - sitemap
   /tags:
     get:
       description: Retrieve a list of all tags
@@ -928,7 +941,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/tags.tagResponse'
+              $ref: '#/definitions/internal_transport_handler_tags.tagResponse'
             type: array
         "500":
           description: Internal Server Error
@@ -949,14 +962,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/tags.createTagReq'
+          $ref: '#/definitions/internal_transport_handler_tags.createTagReq'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/tags.tagResponse'
+            $ref: '#/definitions/internal_transport_handler_tags.tagResponse'
         "400":
           description: Bad Request
           schema:
@@ -1036,14 +1049,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/tags.updateTagReq'
+          $ref: '#/definitions/internal_transport_handler_tags.updateTagReq'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/tags.tagResponse'
+            $ref: '#/definitions/internal_transport_handler_tags.tagResponse'
         "400":
           description: Bad Request
           schema:

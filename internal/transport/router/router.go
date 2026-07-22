@@ -14,13 +14,14 @@ import (
 	oghandler "github.com/eriscoo/blog-backend/internal/transport/handler/og"
 	postsHandler "github.com/eriscoo/blog-backend/internal/transport/handler/posts"
 	profileHandler "github.com/eriscoo/blog-backend/internal/transport/handler/profile"
+	sitemapHandler "github.com/eriscoo/blog-backend/internal/transport/handler/sitemap"
 	tagshandler "github.com/eriscoo/blog-backend/internal/transport/handler/tags"
 	uploadHandler "github.com/eriscoo/blog-backend/internal/transport/handler/upload"
 	"github.com/eriscoo/blog-backend/internal/transport/middleware"
 	"github.com/gin-gonic/gin"
 )
 
-func Setup(r *gin.Engine, authSvc *authsvc.Service, tagsSvc *tagssvc.Service, catsSvc *catsvc.Service, postsSvc *postssvc.Service, profileSvc *profilesvc.Service, contactSvc *contactsvc.Service, uploadH *uploadHandler.UploadHandler, ogH *oghandler.OGHandler, tokens application.TokenService) {
+func Setup(r *gin.Engine, authSvc *authsvc.Service, tagsSvc *tagssvc.Service, catsSvc *catsvc.Service, postsSvc *postssvc.Service, profileSvc *profilesvc.Service, contactSvc *contactsvc.Service, uploadH *uploadHandler.UploadHandler, ogH *oghandler.OGHandler, smH *sitemapHandler.Handler, tokens application.TokenService) {
 	authH := authhandler.New(authSvc)
 	tagsH := tagshandler.New(tagsSvc)
 	catsH := catHandler.New(catsSvc)
@@ -30,6 +31,7 @@ func Setup(r *gin.Engine, authSvc *authsvc.Service, tagsSvc *tagssvc.Service, ca
 
 	r.GET("/og/:slug", ogH.HandleOG)
 	r.GET("/og/page/:page", ogH.HandleStaticPage)
+	r.GET("/sitemap.xml", smH.GetSitemap)
 
 	v1 := r.Group("/api/v1")
 	{

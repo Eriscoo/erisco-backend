@@ -31,7 +31,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/categories.categoryResponse"
+                                "$ref": "#/definitions/internal_transport_handler_categories.categoryResponse"
                             }
                         }
                     },
@@ -70,7 +70,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/categories.createCategoryReq"
+                            "$ref": "#/definitions/internal_transport_handler_categories.createCategoryReq"
                         }
                     }
                 ],
@@ -78,7 +78,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/categories.categoryResponse"
+                            "$ref": "#/definitions/internal_transport_handler_categories.categoryResponse"
                         }
                     },
                     "400": {
@@ -143,7 +143,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/categories.updateCategoryReq"
+                            "$ref": "#/definitions/internal_transport_handler_categories.updateCategoryReq"
                         }
                     }
                 ],
@@ -151,7 +151,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/categories.categoryResponse"
+                            "$ref": "#/definitions/internal_transport_handler_categories.categoryResponse"
                         }
                     },
                     "400": {
@@ -275,7 +275,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/contact.contactReq"
+                            "$ref": "#/definitions/internal_transport_handler_contact.contactReq"
                         }
                     }
                 ],
@@ -321,7 +321,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.loginReq"
+                            "$ref": "#/definitions/internal_transport_handler_auth.loginReq"
                         }
                     }
                 ],
@@ -403,7 +403,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/posts.postResponse"
+                                "$ref": "#/definitions/internal_transport_handler_posts.postResponse"
                             }
                         }
                     },
@@ -442,7 +442,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/posts.createPostReq"
+                            "$ref": "#/definitions/internal_transport_handler_posts.createPostReq"
                         }
                     }
                 ],
@@ -450,7 +450,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/posts.postResponse"
+                            "$ref": "#/definitions/internal_transport_handler_posts.postResponse"
                         }
                     },
                     "400": {
@@ -511,7 +511,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/posts.postResponse"
+                            "$ref": "#/definitions/internal_transport_handler_posts.postResponse"
                         }
                     },
                     "404": {
@@ -565,7 +565,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/posts.updatePostReq"
+                            "$ref": "#/definitions/internal_transport_handler_posts.updatePostReq"
                         }
                     }
                 ],
@@ -573,7 +573,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/posts.postResponse"
+                            "$ref": "#/definitions/internal_transport_handler_posts.postResponse"
                         }
                     },
                     "400": {
@@ -705,7 +705,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/profile.profileResponse"
+                            "$ref": "#/definitions/internal_transport_handler_profile.profileResponse"
                         }
                     },
                     "404": {
@@ -759,7 +759,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/profile.updateProfileReq"
+                            "$ref": "#/definitions/internal_transport_handler_profile.updateProfileReq"
                         }
                     }
                 ],
@@ -767,7 +767,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.UserProfile"
+                            "$ref": "#/definitions/github_com_eriscoo_blog-backend_internal_domain.UserProfile"
                         }
                     },
                     "400": {
@@ -1005,7 +1005,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/posts.postResponse"
+                            "$ref": "#/definitions/internal_transport_handler_posts.postResponse"
                         }
                     },
                     "404": {
@@ -1049,7 +1049,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.registerReq"
+                            "$ref": "#/definitions/internal_transport_handler_auth.registerReq"
                         }
                     }
                 ],
@@ -1084,6 +1084,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/sitemap.xml": {
+            "get": {
+                "description": "Returns XML sitemap for all published posts and static pages",
+                "produces": [
+                    "text/xml"
+                ],
+                "tags": [
+                    "sitemap"
+                ],
+                "summary": "Get sitemap",
+                "responses": {
+                    "200": {
+                        "description": "XML sitemap",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/tags": {
             "get": {
                 "description": "Retrieve a list of all tags",
@@ -1100,7 +1120,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/tags.tagResponse"
+                                "$ref": "#/definitions/internal_transport_handler_tags.tagResponse"
                             }
                         }
                     },
@@ -1139,7 +1159,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/tags.createTagReq"
+                            "$ref": "#/definitions/internal_transport_handler_tags.createTagReq"
                         }
                     }
                 ],
@@ -1147,7 +1167,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/tags.tagResponse"
+                            "$ref": "#/definitions/internal_transport_handler_tags.tagResponse"
                         }
                     },
                     "400": {
@@ -1212,7 +1232,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/tags.updateTagReq"
+                            "$ref": "#/definitions/internal_transport_handler_tags.updateTagReq"
                         }
                     }
                 ],
@@ -1220,7 +1240,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/tags.tagResponse"
+                            "$ref": "#/definitions/internal_transport_handler_tags.tagResponse"
                         }
                     },
                     "400": {
@@ -1384,104 +1404,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "auth.loginReq": {
-            "type": "object",
-            "required": [
-                "email",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth.registerReq": {
-            "type": "object",
-            "required": [
-                "email",
-                "name",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string",
-                    "minLength": 6
-                }
-            }
-        },
-        "categories.categoryResponse": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "name": {
-                    "type": "string",
-                    "example": "technology"
-                }
-            }
-        },
-        "categories.createCategoryReq": {
-            "type": "object",
-            "required": [
-                "name"
-            ],
-            "properties": {
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "categories.updateCategoryReq": {
-            "type": "object",
-            "required": [
-                "name"
-            ],
-            "properties": {
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "contact.contactReq": {
-            "type": "object",
-            "required": [
-                "cf-turnstile-response",
-                "email"
-            ],
-            "properties": {
-                "cf-turnstile-response": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "message": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "subject": {
-                    "type": "string"
-                }
-            }
-        },
-        "domain.UserProfile": {
+        "github_com_eriscoo_blog-backend_internal_domain.UserProfile": {
             "type": "object",
             "properties": {
                 "avatar_url": {
@@ -1510,7 +1433,104 @@ const docTemplate = `{
                 }
             }
         },
-        "posts.createPostReq": {
+        "internal_transport_handler_auth.loginReq": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_transport_handler_auth.registerReq": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 6
+                }
+            }
+        },
+        "internal_transport_handler_categories.categoryResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "technology"
+                }
+            }
+        },
+        "internal_transport_handler_categories.createCategoryReq": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_transport_handler_categories.updateCategoryReq": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_transport_handler_contact.contactReq": {
+            "type": "object",
+            "required": [
+                "cf-turnstile-response",
+                "email"
+            ],
+            "properties": {
+                "cf-turnstile-response": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "subject": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_transport_handler_posts.createPostReq": {
             "type": "object",
             "required": [
                 "title"
@@ -1539,7 +1559,7 @@ const docTemplate = `{
                 }
             }
         },
-        "posts.postResponse": {
+        "internal_transport_handler_posts.postResponse": {
             "type": "object",
             "properties": {
                 "body": {
@@ -1592,7 +1612,7 @@ const docTemplate = `{
                 }
             }
         },
-        "posts.updatePostReq": {
+        "internal_transport_handler_posts.updatePostReq": {
             "type": "object",
             "properties": {
                 "body": {
@@ -1618,7 +1638,7 @@ const docTemplate = `{
                 }
             }
         },
-        "profile.profileResponse": {
+        "internal_transport_handler_profile.profileResponse": {
             "type": "object",
             "properties": {
                 "avatar_url": {
@@ -1647,7 +1667,7 @@ const docTemplate = `{
                 }
             }
         },
-        "profile.updateProfileReq": {
+        "internal_transport_handler_profile.updateProfileReq": {
             "type": "object",
             "properties": {
                 "avatar_url": {
@@ -1667,7 +1687,7 @@ const docTemplate = `{
                 }
             }
         },
-        "tags.createTagReq": {
+        "internal_transport_handler_tags.createTagReq": {
             "type": "object",
             "required": [
                 "name"
@@ -1678,7 +1698,7 @@ const docTemplate = `{
                 }
             }
         },
-        "tags.tagResponse": {
+        "internal_transport_handler_tags.tagResponse": {
             "type": "object",
             "properties": {
                 "id": {
@@ -1691,7 +1711,7 @@ const docTemplate = `{
                 }
             }
         },
-        "tags.updateTagReq": {
+        "internal_transport_handler_tags.updateTagReq": {
             "type": "object",
             "required": [
                 "name"

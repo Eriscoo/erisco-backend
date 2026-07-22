@@ -63,8 +63,8 @@ func (h *OGHandler) HandleOG(c *gin.Context) {
 	}
 
 	title := html.EscapeString(post.Title) + " | Eriscoo"
-	description := stripAndTruncate(post.Body, 200)
-	description = html.EscapeString(description)
+	rawDescription := stripAndTruncate(post.Body, 200)
+	description := html.EscapeString(rawDescription)
 	url := h.siteURL + "/" + slug
 	imageURL := ""
 	if post.ImageURL != "" {
@@ -85,7 +85,8 @@ func (h *OGHandler) HandleOG(c *gin.Context) {
 
 	extra := ogImageAlt(imageURL, title) + "\n" +
 		`<meta property="article:published_time" content="` + publishedAt + `">` + "\n" +
-		ogTags(tags)
+		ogTags(tags) + "\n" +
+		makeArticleJSONLD(post.Title, rawDescription, imageURL, publishedAt, url, post.CategoryNames, post.TagNames)
 
 	h.renderHTML(c, title, description, url, imageURL, "article", extra, bodyContent)
 }
@@ -113,7 +114,9 @@ func (h *OGHandler) HandleStaticPage(c *gin.Context) {
 
 	bodyContent := `<h1>` + title + `</h1>` + "\n" + `<p>` + description + `</p>`
 
-	h.renderHTML(c, title, description, url, imageURL, "website", ogImageAlt(imageURL, title), bodyContent)
+	extra := ogImageAlt(imageURL, title) + "\n" + makeWebPageJSONLD(meta.Title, meta.Description, imageURL, url)
+
+	h.renderHTML(c, title, description, url, imageURL, "website", extra, bodyContent)
 }
 
 func (h *OGHandler) renderHTML(c *gin.Context, title, description, url, imageURL, ogType, extra, bodyContent string) {
@@ -183,4 +186,61 @@ func ogTags(tags string) string {
 		}
 	}
 	return strings.Join(lines, "\n")
+}
+
+type articleJSONLD struct {
+	Context        string       `json:"@context"`
+	Type           string       `json:"@type"`
+	Headline       string       `json:"headline"`
+	Description    string       `json:"description"`
+	Image          string       `json:"image,omitempty"`
+	DatePublished  string       `json:"datePublished"`
+	Author         authorJSONLD `json:"author"`
+	URL            string       `json:"url"`
+	ArticleSection string       `json:"articleSection,omitempty"`
+	Keywords       string       `json:"keywords,omitempty"`
+}
+
+type authorJSONLD struct {
+	Type string `json:"@type"`
+	Name string `json:"name"`
+}
+
+type webPageJSONLD struct {
+	Context     string `json:"@context"`
+	Type        string `json:"@type"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Image       string `json:"image,omitempty"`
+	URL         string `json:"url"`
+}
+
+func makeArticleJSONLD(headline, description, imageURL, publishedAt, url, categories, keywords string) string {
+	ld := articleJSONLD{
+		Context:        "https://schema.org",
+		Type:           "BlogPosting",
+		Headline:       headline,
+		Description:    description,
+		Image:          imageURL,
+		DatePublished:  publishedAt,
+		Author:         authorJSONLD{Type: "Person", Name: "Eriscoo"},
+		URL:            url,
+		ArticleSection: categories,
+		Keywords:       keywords,
+	}
+	b, _ := json.Marshal(ld)
+	return `<script type="application/ld+json">` + string(b) + `</script>`
+}
+
+func makeWebPageJSONLD(name, description, imageURL, url string) string {
+	ld := webPageJSONLD{
+		Context:     "https://schema.org",
+		Type:        "WebPage",
+		Name:        name,
+		Description: description,
+		Image:       imageURL,
+		URL:         url,
+	}
+	b, _ := json.Marshal(ld)
+	return `<script type="application/ld+json">` + string(b) + `</script>`
 }
